@@ -25,4 +25,8 @@ logging.basicConfig(
 if __name__ == "__main__":
     read_env_file()
 
-    CollectFeedsJob().do()
+    try:
+        CollectFeedsJob().do()
+    except Exception as err:
+        logger.error(str(err), exc_info=err)
+        raise
