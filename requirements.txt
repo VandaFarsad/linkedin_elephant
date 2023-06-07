@@ -1,0 +1,4 @@
+git+https://github.com/VandaFarsad/linkedin-api.git
+
+pandas==2.0.1
+openpyxl==3.1.2
