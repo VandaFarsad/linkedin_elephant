@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
+from settings import BASE_DIR
 
 
-def get_env_data_as_dict(path: str) -> dict[str, str]:
+def get_env_data_as_dict(path: Path) -> dict[str, str]:
     """
     For loading the .env -file (for docker) into the virtual environment
     """
@@ -13,6 +15,6 @@ def get_env_data_as_dict(path: str) -> dict[str, str]:
         )
 
 
-def read_env_file(path: str = ".env") -> None:
+def read_env_file(path: Path = BASE_DIR / ".env") -> None:
     vars_dict = get_env_data_as_dict(path)
     os.environ.update(vars_dict)
