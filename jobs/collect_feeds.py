@@ -110,20 +110,15 @@ class CollectFeedsJob:
                     f'{content["Datum"]} {content["Autor"]}. Kommentare: {content["Kommentare"]}. URL: {feed["url"]}'
                 )
 
-        df_pivot: pd.DataFrame = pd.pivot_table(
-            pd.DataFrame(contents),
-            index=["Inhalt"],
-            aggfunc={"Kommentare": "nunique", "Datum": "min", "Autor": "min", "URL": "min"},
-        )
-        df_pivot = (
-            df_pivot.reset_index()
+        df: pd.DataFrame = (
+            pd.DataFrame(contents)
             .sort_values(["Autor", "Inhalt"])
             .sort_values(["Kommentare"], ascending=False)[["Datum", "Autor", "Kommentare", "URL", "Inhalt"]]
         )
-        df_pivot["URL"] = df_pivot["URL"].apply(lambda x: f'=HYPERLINK("{x}", "Link")')
+        df["URL"] = df["URL"].apply(lambda x: f'=HYPERLINK("{x}", "Link")')
 
         FEED_EXPORT_PATH.mkdir(exist_ok=True)
-        df_pivot.to_excel(
+        df.to_excel(
             FEED_EXPORT_PATH / f"LinkedIn_Feeds_{datetime.datetime.now().strftime('%Y-%m-%d--%H-%M-%S')}.xlsx",
             index=False,
         )
