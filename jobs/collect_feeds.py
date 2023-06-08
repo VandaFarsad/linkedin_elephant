@@ -61,13 +61,6 @@ class CollectFeedsJob:
     def count_post_comments(self, api: Linkedin, post_urn: str) -> int:
         """
         get_post_comments: Get post comments
-
-        :param post_urn: Post URN
-        :type post_urn: str
-        :param comment_count: Number of comments to fetch
-        :type comment_count: int, optional
-        :return: List of post comments
-        :rtype: list
         """
         counter = 0
         while True:
@@ -115,7 +108,7 @@ class CollectFeedsJob:
             .sort_values(["Autor", "Inhalt"])
             .sort_values(["Kommentare"], ascending=False)[["Datum", "Autor", "Kommentare", "URL", "Inhalt"]]
         )
-        df["URL"] = df["URL"].apply(lambda x: f'=HYPERLINK("{x}", "Link")')
+        # df["URL"] = df["URL"].apply(lambda x: f'=HYPERLINK("{x}", "Link")')
 
         FEED_EXPORT_PATH.mkdir(exist_ok=True)
         df.to_excel(
