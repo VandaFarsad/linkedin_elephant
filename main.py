@@ -27,7 +27,7 @@ if __name__ == "__main__":
     read_env_file()
 
     try:
-        CollectFeedsJob().do()
+        # CollectFeedsJob().do()
         AskAIJob().do()
         logger.info("Alle jobs erfolgreich beendet.")
     except Exception as err:

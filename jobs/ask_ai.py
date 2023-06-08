@@ -24,7 +24,7 @@ class AskAIJob:
         df = df.sort_values(["Kommentare"], ascending=False).head(self.N_BEST_FEEDS)
         records = df[["Autor", "URL", "Inhalt"]].to_dict("records")
         data_string = "\n\n\n".join(
-            [f"""Feed. Author: {r['Autor']}. URL: {r['URL']}. Content: "{r['Inhalt']}" """ for r in records]
+            [f"""The following Linkedin feed is written by {r['Autor']}: "{r['Inhalt']}" """ for r in records]
         )
         print(data_string)
         completion = openai.ChatCompletion.create(
@@ -32,11 +32,11 @@ class AskAIJob:
             messages=[
                 {
                     "role": "system",
-                    "content": "Answer as concisely as possible.",
+                    "content": "Answer as accurately as possible.",
                 },
                 {
                     "role": "user",
-                    "content": f"summarize each linkedin post in one sentence and link the person who wrote it: {data_string}",  # noqa
+                    "content": f"Summarize each LinkedIn post in one sentence (separated by a semicolon) and link to the person who wrote it: {data_string}",  # noqa
                 },
             ],
         )
@@ -50,4 +50,4 @@ class AskAIJob:
         logger.info(f"Verarbeite Feed Export Datei {feed_export}")
         df = pd.read_excel(feed_export)
         response_summarize = self.summarize(df)
-        print(f"ChatGPT: {response_summarize}")
+        print(f"ChatGPT: {response_summarize.split(';')}")
